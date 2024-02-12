@@ -1,6 +1,7 @@
 from machine import Pin, PWM, I2C
 from ssd1306 import SSD1306_I2C
-import courier20, writer # custom font display
+import courier20 # custom font
+from writer_minimal import Writer # custom font display
 import time, sys
 
 BTNLED_GPIO = [
@@ -39,7 +40,7 @@ buzzer = PWM(Pin(BUZZER_PIN))
 i2c = I2C(0, sda = Pin(OLED_PINS['SDA']), scl = Pin(OLED_PINS['SCL']), freq = 400000)
 time.sleep(1) # Allow I2C to kick in
 display = SSD1306_I2C(SCREEN['width'], SCREEN['height'], i2c)
-font_writer = writer.Writer(display, courier20, False)
+font_writer = Writer(display, courier20, False)
 
 # Functions
 
