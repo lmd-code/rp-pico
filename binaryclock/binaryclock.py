@@ -114,8 +114,8 @@ def toggle_leds(hrs: int, mins: int, secs: int):
     bin_mins = "{0:0{len}b}".format(mins, len=NUM_LEDS_M) # minutes in binary
     bin_secs = "{0:0{len}b}".format(secs, len=NUM_LEDS_S) # seconds in binary
 
-    print(f"{hrs:0>2}:{mins:0>2}:{secs:0>2} - {bin_hrs} : {bin_mins} : {bin_secs}") # debug print
-    '''
+    print(f"{hrs:0>2}:{mins:0>2}:{secs:0>2} - {bin_hrs} : {bin_mins} : {bin_secs}")
+
     # Set hours
     for led in range(NUM_LEDS_H):
         GPIO_LED_H[led]['led'].value(int(bin_hrs[led]))
@@ -127,28 +127,24 @@ def toggle_leds(hrs: int, mins: int, secs: int):
     # Set Seconds
     for led in range(NUM_LEDS_S):
         GPIO_LED_S[led]['led'].value(int(bin_secs[led]))
-    '''
+
 
 def clear_leds():
     """
     Turn all the LEDs off
     """
-    '''
     for led in range(NUM_LEDS_H):
         GPIO_LED_H[led]['led'].value(0)
     for led in range(NUM_LEDS_M):
         GPIO_LED_M[led]['led'].value(0)
     for led in range(NUM_LEDS_S):
         GPIO_LED_S[led]['led'].value(0)
-    '''
-    print('LEDs off')
 
 
 ################################################################################
 # Run Program
 
 try:
-    '''
     # Make LED pin connections
     for i in range(NUM_LEDS_H):
         GPIO_LED_H[i]['led'] = Pin(GPIO_LED_H[i]['pin'], Pin.OUT)
@@ -158,7 +154,6 @@ try:
 
     for i in range(NUM_LEDS_S):
         GPIO_LED_S[i]['led'] = Pin(GPIO_LED_S[i]['pin'], Pin.OUT)
-    '''
 
     # Init WLAN
     wlan = network.WLAN(network.STA_IF)
