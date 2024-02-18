@@ -167,20 +167,21 @@ try:
     # Init the sync countdown timer
     sync_countdown = SYNC_PERIOD
 
-    clear_leds() # make sure all LEDS are off
+    # Make sure all LEDS are off
+    clear_leds()
     
     while True:
         Y, M, D, W, HH, MM, SS, MS = rtc.datetime() # Get current timestamp
-        toggle_leds(HH, MM, SS) # toggle LEDs on/off according to time
+        toggle_leds(HH, MM, SS) # Toggle LEDs on/off according to time
 
         # Synchronise the RTC if countdown has elapsed
         if sync_countdown == 0:
-            sync_countdown = SYNC_PERIOD # reset timer
-            sync_rtc(rtc, blocking=False) # don't block this time
+            sync_countdown = SYNC_PERIOD # Reset timer
+            sync_rtc(rtc, blocking=False) # Don't block this time
 
-        sync_countdown -= 1 # decrement timer
+        sync_countdown -= 1 # Decrement timer
 
-        time.sleep(1) # wait 1 second
+        time.sleep(1) # Wait 1 second
     
 except KeyboardInterrupt:
     clear_leds()

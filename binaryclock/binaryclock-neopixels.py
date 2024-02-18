@@ -7,15 +7,10 @@ import time, sys, network, urequests
 TIME_API_URI = "http://worldtimeapi.org/api/ip"
 SYNC_PERIOD = 60*60*24 # sync once a day
 
-# Number of hour, min, sec LEDs - each LED represents one binary bit
-NUM_LEDS_H = 5
-NUM_LEDS_M = 6
-NUM_LEDS_S = 6
-
 # Set each NeoPixel strip ('npx') and associate an RGB colour
-STRIP_H = {'npx': NeoPixel(Pin(28), NUM_LEDS_H), 'rgb': (255,0,0)} # Hours (24-hr format) / Red
-STRIP_M = {'npx': NeoPixel(Pin(27), NUM_LEDS_M), 'rgb': (0,255,0)} # Minutes / Green
-STRIP_S = {'npx': NeoPixel(Pin(26), NUM_LEDS_S), 'rgb': (0,0,255)} # Seconds / Blue
+STRIP_H = {'npx': NeoPixel(Pin(27), 5), 'rgb': (255,0,0)} # Hours (24-hr format) / Red
+STRIP_M = {'npx': NeoPixel(Pin(21), 6), 'rgb': (0,255,0)} # Minutes / Green
+STRIP_S = {'npx': NeoPixel(Pin(17), 6), 'rgb': (0,0,255)} # Seconds / Blue
 
 LED_OFF = (0,0,0) # Black = off/unlit
 
@@ -89,22 +84,22 @@ def toggle_leds(hrs: int, mins: int, secs: int):
         Seconds
     """
 
-    bin_hrs = "{0:0{len}b}".format(hrs, len=NUM_LEDS_H) # hours in binary
-    bin_mins = "{0:0{len}b}".format(mins, len=NUM_LEDS_M) # minutes in binary
-    bin_secs = "{0:0{len}b}".format(secs, len=NUM_LEDS_S) # seconds in binary
+    bin_hrs = "{0:0{len}b}".format(hrs, len=STRIP_H['npx'].n) # hours in binary
+    bin_mins = "{0:0{len}b}".format(mins, len=STRIP_M['npx'].n) # minutes in binary
+    bin_secs = "{0:0{len}b}".format(secs, len=STRIP_S['npx'].n) # seconds in binary
 
     print(f"{hrs:0>2}:{mins:0>2}:{secs:0>2} - {bin_hrs} : {bin_mins} : {bin_secs}")
 
     # Set hours
-    for led in range(NUM_LEDS_H):
+    for led in range(STRIP_H['npx'].n):
         if (int(bin_hrs[led]) == 1):
             STRIP_H['npx'][led] = STRIP_H['rgb']
         else:
             STRIP_H['npx'][led] = LED_OFF
     STRIP_H['npx'].write()
 
-    # set minutes
-    for led in range(NUM_LEDS_M):
+    # Set minutes
+    for led in range(STRIP_M['npx'].n):
         if (int(bin_mins[led]) == 1):
             STRIP_M['npx'][led] = STRIP_M['rgb']
         else:
@@ -112,7 +107,7 @@ def toggle_leds(hrs: int, mins: int, secs: int):
     STRIP_M['npx'].write()
 
     # Set seconds
-    for led in range(NUM_LEDS_S):
+    for led in range(STRIP_S['npx'].n):
         if (int(bin_secs[led]) == 1):
             STRIP_S['npx'][led] = STRIP_S['rgb']
         else:
@@ -123,15 +118,15 @@ def clear_leds():
     """
     Turn all the LEDs off
     """
-    for led in range(NUM_LEDS_H):
+    for led in range(STRIP_H['npx'].n):
         STRIP_H['npx'][led] = LED_OFF
     STRIP_H['npx'].write()
 
-    for led in range(NUM_LEDS_M):
+    for led in range(STRIP_M['npx'].n):
         STRIP_M['npx'][led] = LED_OFF
     STRIP_M['npx'].write()
 
-    for led in range(NUM_LEDS_S):
+    for led in range(STRIP_S['npx'].n):
         STRIP_S['npx'][led] = LED_OFF
     STRIP_S['npx'].write()
 
@@ -152,20 +147,21 @@ try:
     # Init the sync countdown timer
     sync_countdown = SYNC_PERIOD
 
-    clear_leds() # make sure all LEDS are off
+    # Make sure all LEDS are off
+    clear_leds()
     
     while True:
         Y, M, D, W, HH, MM, SS, MS = rtc.datetime() # Get current timestamp
-        toggle_leds(HH, MM, SS) # toggle LEDs on/off according to time
+        toggle_leds(HH, MM, SS) # Toggle LEDs on/off according to time
 
         # Synchronise the RTC if countdown has elapsed
         if sync_countdown == 0:
-            sync_countdown = SYNC_PERIOD # reset timer
-            sync_rtc(rtc, blocking=False) # don't block this time
+            sync_countdown = SYNC_PERIOD # Reset timer
+            sync_rtc(rtc, blocking=False) # Don't block this time
 
-        sync_countdown -= 1 # decrement timer
+        sync_countdown -= 1 # Decrement timer
 
-        time.sleep(1) # wait 1 second
+        time.sleep(1) # Wait 1 second
     
 except KeyboardInterrupt:
     clear_leds()
