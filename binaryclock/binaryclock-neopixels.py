@@ -22,7 +22,7 @@ def connect_wifi():
 
     print("Connecting to WiFi", end="")
     wlan.active(True)
-    wlan.connect(WIFI_SSID, WIFI_PW) # SSD/PW from file not committed to Git repo
+    wlan.connect(WIFI_SSID, WIFI_PW) # SSID/PW from file not committed to Git repo
     while not wlan.isconnected():
         print(".", end="")
         time.sleep(0.1)
