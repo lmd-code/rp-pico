@@ -3,9 +3,16 @@ from neopixel import NeoPixel
 from localconfig import WIFI_SSID, WIFI_PW
 import time, sys, network, urequests
 
-# World Time Clock API to synchronise Pico's RTC
-TIME_API_URI = "http://worldtimeapi.org/api/ip"
-SYNC_PERIOD = 60*60*24 # sync once a day
+# World Time Clock API to synchronise Pico's RTC - set this to your own timezone
+TIME_API_URI = "http://worldtimeapi.org/api/timezone/Europe/London"
+# Alternatively use IP address if it is the same as your timezone
+#TIME_API_URI = "http://worldtimeapi.org/api/ip"
+
+# Synchronisation time checks (applies to UK timezone, where we have summer daylight savings)
+SYNC_TIMES = {
+    'default': '01:00:01', # Most of the year (clocks go forward to BST at 01:00 last Sun in Mar)
+    'october': '02:00:01', # October only (clocks go back to GMT at 02:00 last Sun in Oct)
+}
 
 # Set each NeoPixel strip ('npx') and associate an RGB colour
 STRIP_H = {'npx': NeoPixel(Pin(27), 5), 'rgb': (255,0,0)} # Hours (24-hr format) / Red
@@ -144,9 +151,6 @@ try:
     # Synchronise the RTC with the World Clock
     sync_rtc(rtc)
 
-    # Init the sync countdown timer
-    sync_countdown = SYNC_PERIOD
-
     # Make sure all LEDS are off
     clear_leds()
     
@@ -154,12 +158,11 @@ try:
         Y, M, D, W, HH, MM, SS, MS = rtc.datetime() # Get current timestamp
         toggle_leds(HH, MM, SS) # Toggle LEDs on/off according to time
 
-        # Synchronise the RTC if countdown has elapsed
-        if sync_countdown == 0:
-            sync_countdown = SYNC_PERIOD # Reset timer
-            sync_rtc(rtc, blocking=False) # Don't block this time
-
-        sync_countdown -= 1 # Decrement timer
+        now_time = f"{HH:0>2}:{MM:0>2}:{SS:0>2}" # Current RTC time (HH:MM:SS)
+        sync_time = SYNC_TIMES['october' if (M == 10) else 'default'] # 01:00:01/02:00:01
+        # Synchronise the RTC if sync time is reached
+        if (now_time == sync_time):
+            sync_rtc(rtc, blocking=False)
 
         time.sleep(1) # Wait 1 second
     
