@@ -93,39 +93,56 @@ def play_buzzer_tune(tune: str):
     buzzer_off()
 
 
-def display_text(msg: str):
-    """ Display specified text centred on screen horizontally and vertically """
-    if '\n' in msg:
-        words = msg.split('\n')
+def display_text(msg: str, hcentre = False, vcentre = False):
+    """
+    Display text message, optionally centred on screen horizontally and vertically
+
+    Parameters:
+    -----------
+    msg: str
+        Text message to display (can contain newlines to force multiline)
+    hcentre: bool
+        Align centre horizontally
+    vcentre: bool
+        Align centre vertically
+    """
+    if "\n" in msg:
+        lines = msg.split('\n')
     else:
         words = msg.split()
 
-    lines = ['']
-    row = 0
+        lines = ['']
+        row = 0
 
-    for word in words:
-        row_len = len(lines[row])
-        word_len = len(word)
+        for word in words:
+            row_len = len(lines[row])
+            word_len = len(word)
 
-        if (row_len > 0): word_len += 1 # +1 for space
+            if (row_len > 0): word_len += 1 # +1 for space
 
-        if row_len + word_len <= SCRN_COLS:
-            if (row_len > 0): lines[row] += ' ' # add space
-            lines[row] += word
-        else:
-            row += 1
-            if (row < SCRN_ROWS):
-                lines.append(word)
-        if row == SCRN_ROWS:
-            break
+            if row_len + word_len <= SCRN_COLS:
+                if (row_len > 0): lines[row] += ' ' # add space
+                lines[row] += word
+            else:
+                row += 1
+                if (row < SCRN_ROWS):
+                    lines.append(word)
+            if row == SCRN_ROWS:
+                break
 
     display.fill(0)
     num_lines = len(lines)
 
-    y = int((SCREEN['working_h'] - (num_lines * FONT['line_height'])) / 2) + SCREEN['v_padding']
+    if (vcentre):
+        y = int((SCREEN['working_h'] - (num_lines * FONT['line_height'])) / 2) + SCREEN['v_padding']
+    else:
+        y = SCREEN['v_padding']
 
     for line in range(num_lines):
-        x = int((SCREEN['width'] - (FONT['width'] * len(lines[line]))) / 2)
+        if (hcentre):
+            x = int((SCREEN['width'] - (FONT['width'] * len(lines[line]))) / 2)
+        else:
+            x = 0
         display.text(lines[line].upper(), x, y + 1)
         y = y + FONT['line_height']
     display.show()
