@@ -253,20 +253,25 @@ try:
         led_off()
         display_clear()
 
-        ##### Wait for player input
-        display_text('Press any button to play the game')
+        ##### Welcome screen
+        display_text("PICO SIMON GAME\nCHOOSE LEVEL:-\n1: Red\n2: Green\n3: Blue\n4: Yellow", False)
+
+        # Wait for player input
         while play_game == False:
-            if poll_btns() > -1:
+            which_btn = poll_btns()
+            if which_btn > -1:
+                current_level = which_btn
                 play_game = True
+                break
 
         ##### Game play
 
         sequence_len = levels[current_level]
 
-        display_text("LEVEL " + str(current_level + 1) + "\n(" + str(sequence_len) + " ROUNDS)")
+        display_text("LEVEL " + str(current_level + 1) + "\n(" + str(sequence_len) + " ROUNDS)", True, True)
         time.sleep(1)
         for _ in reversed(range(5)):
-            display_text('... ' + str(_ + 1) + ' ...')
+            display_text('... ' + str(_ + 1) + ' ...', True, True)
             time.sleep(1)
 
 
@@ -282,7 +287,7 @@ try:
             if (current_round in speed_increases):
                 speed_current -= speed_decrement # increase speed (decrease sleep delay)
 
-            display_text('Round ' + str(current_round))
+            display_text('Round ' + str(current_round), True, True)
 
             time.sleep(1)
 
@@ -295,7 +300,7 @@ try:
             btn_presses = 0 # current count of button presses
             player_err = False # flag when player makes an error
 
-            display_text('Your turn')
+            display_text('Your turn', True, True)
 
             # Loop until reaching required button presses or player makes an error
             while (btn_presses < req_btn_presses):
@@ -310,12 +315,12 @@ try:
 
             # Player input over, if there was an error, immediately end the current game
             if player_err:
-                display_text('Incorrect!')
+                display_text('Incorrect!', True, True)
                 break # stop looping rounds and go to game over
 
             # No errors, then go to next round (if there is one)
             score += 1 # increment score
-            display_text('Correct!')
+            display_text('Correct!', True, True)
             play_buzzer_tune('correct')
             time.sleep(1)
 
@@ -325,10 +330,10 @@ try:
 
         # Play/show either loser/winner tune/text
         if player_err:
-            display_text("You got " + score_txt + "\nBetter luck\nnext time!?")
+            display_text("You got " + score_txt + "\nBetter luck\nnext time!?", True, True)
             play_buzzer_tune('loser')
         else:
-            display_text("You got " + score_txt + "\nWell done!")
+            display_text("You got " + score_txt + "\nWell done!", True, True)
             play_buzzer_tune('winner')
         
         time.sleep(2) # pause two secs, then loop back to start
