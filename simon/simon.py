@@ -8,7 +8,7 @@ A game  of Simon
 """
 
 from machine import Pin, PWM, I2C
-from ssd1306 import SSD1306_I2C
+from libs.ssd1306 import SSD1306_I2C
 import random, time, sys
 
 BTNLED_GPIO = [

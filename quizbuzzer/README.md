@@ -13,7 +13,7 @@ For a quick demo, you can [play with a virtual version on Wokwi](https://wokwi.c
 
 ## Requirements
 
-The following required modules for a 128x64 monochrome I2C OLED display are included in this repo:
+The following are required modules for a 128x64 monochrome I2C OLED display:
 
 - SSD1306 Driver [MicroPython repo](https://github.com/micropython/micropython-lib/)
     - [`ssd1306.py`](https://github.com/micropython/micropython-lib/blob/master/micropython/drivers/display/ssd1306/ssd1306.py)

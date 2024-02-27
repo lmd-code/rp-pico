@@ -2,5 +2,6 @@
 .micropico
 dumps/
 dev/
+libs/
 __pycache__
 *.pyc

@@ -1,7 +1,7 @@
 from machine import Pin, PWM, I2C
-from ssd1306 import SSD1306_I2C
-import courier20 # custom font
-from writer_minimal import Writer # custom font display
+from libs.ssd1306 import SSD1306_I2C
+import libs.courier20 as courier20 # custom font
+from libs.writer_minimal import Writer # custom font display
 import time, sys
 
 BTNLED_GPIO = [

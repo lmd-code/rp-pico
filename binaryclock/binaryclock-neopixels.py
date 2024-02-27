@@ -1,6 +1,6 @@
 from machine import Pin, RTC
 from neopixel import NeoPixel
-from localconfig import WIFI_SSID, WIFI_PW
+from libs.localconfig import WIFI_SSID, WIFI_PW
 import time, sys, network, urequests
 
 # World Time Clock API to synchronise Pico's RTC - set this to your own timezone
