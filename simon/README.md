@@ -3,17 +3,16 @@
 An implementation of the Simon game, because everybody does it sooner or later!
 
 - 4 Skill Levels
-    - L1 : 8 lights
-    - L2 : 14 lights
-    - L3 : 20 lights
-    - L4 : 31 lights
-- Flashing speeds up after 5, 9, and 13 lights
+    - Level 1 : 8 lights
+    - Level 2 : 14 lights
+    - Level 3 : 20 lights
+    - Level 4 : 31 lights
+- Flashing speeds up at 5, 9, and 13 lights
 
-**Currently only level 1 is playable.**
+For a demo, you can [play with a virtual version on Wokwi](https://wokwi.com/projects/390970795638773761) -- in the circuit area, press the green triangle button to start the program running and the grey square to stop it again. You can use keyboard input for "pressing the buttons": `1 = Red, 2 = Green, 3 = Blue, 4 = Yellow`.
 
 ## @Todo
 
-- Add level selector
 - Save high score
 
 ## Requirements
